@@ -27,6 +27,10 @@ class MainScreen(MenuScreen[PunchcardState]):
     def on_detach(self):
         self._timer.stop()
 
+    def on_client_disconnected(self):
+        self.state.punch_out()
+        self.refresh()
+
     def on_timeout(self):
         if self.state.punched_in:
             self.refresh()

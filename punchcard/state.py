@@ -22,7 +22,6 @@ class PunchcardState:
             return []
         with open(self.log_file, "r") as fp:
             hist = json.load(fp)
-        print(json.dumps(hist, indent=2))
         d = [
             Period(
                 start=datetime.fromisoformat(r["start"]),
@@ -40,7 +39,6 @@ class PunchcardState:
             )
             for p in self.hist
         ]
-        print(json.dumps(d, indent=2))
         with open(self.log_file, "w") as fp:
             json.dump(d, fp)
 
@@ -92,17 +90,16 @@ class PunchcardState:
         return timedelta(seconds=sum([p.length_in_seconds() for p in self.hist]))
 
     def punch_in(self) -> None:
-        self.punch_out()
-        self.hist.append(Period(start=datetime.now(), end=None))
-        self._save()
+        if not self.punched_in:
+            print(f"Punched in at {self.title}")
+            self.hist.append(Period(start=datetime.now(), end=None))
+            self._save()
 
     def punch_out(self) -> None:
-        if len(self.hist) == 0:
-            return
-        if self.hist[-1].end is not None:
-            return
-        self.hist[-1].end = datetime.now()
-        self._save()
+        if self.punched_in:
+            print(f"Punched out at {self.title}")
+            self.hist[-1].end = datetime.now()
+            self._save()
 
     def toggle(self) -> None:
         if self.punched_in:
