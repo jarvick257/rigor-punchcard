@@ -22,10 +22,14 @@ class Period:
             start=max(self.start, other.start),
             end=min(my_end, other.end or my_end),
         )
-        if not self.is_valid() or self.length_in_seconds() == 0:
+        if not intersection.is_valid() or intersection.length_in_seconds() == 0:
             return None
         # intersection can only shrink
-        # assert intersection.length_in_seconds() <= min(
-        #     self.length_in_seconds(), other.length_in_seconds()
-        # )
+        assert intersection.length_in_seconds() <= min(
+            self.length_in_seconds(), other.length_in_seconds()
+        )
         return intersection
+
+    def __str__(self) -> str:
+        end = str(self.end) if self.end is not None else "inf"
+        return f"{self.start} -> {end}"

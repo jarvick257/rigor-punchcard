@@ -11,7 +11,7 @@ def _td(t: timedelta) -> str:
     seconds = int(seconds)
     if hours < 10:
         return f"{minutes:02d}m {seconds:02d}s"
-    return f"{hours}h {minutes:02d}s"
+    return f"{hours}h {minutes:02d}m"
 
 
 class MainScreen(MenuScreen[PunchcardState]):
@@ -51,11 +51,11 @@ class MainScreen(MenuScreen[PunchcardState]):
         if self.selection == "Day":
             return Content(self.state.title, f"D: {_td(self.state.time_today())}")
         if self.selection == "Week":
-            return Content(self.state.title, f"W: {_td(self.state.time_today())}")
+            return Content(self.state.title, f"W: {_td(self.state.time_this_week())}")
         if self.selection == "Month":
-            return Content(self.state.title, f"M: {_td(self.state.time_today())}")
+            return Content(self.state.title, f"M: {_td(self.state.time_this_month())}")
         if self.selection == "Total":
-            return Content(self.state.title, f"T: {_td(self.state.time_today())}")
+            return Content(self.state.title, f"T: {_td(self.state.time_total())}")
 
     def on_enter(self):
         if self.selection == "Back":

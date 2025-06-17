@@ -55,9 +55,8 @@ class PunchcardState:
 
     def _get_time_in_period(self, period: Period) -> timedelta:
         overlap = [r.intersect(period) for r in self.hist]
-        return timedelta(
-            seconds=sum([o.length_in_seconds() for o in overlap if o is not None])
-        )
+        overlap = [o.length_in_seconds() for o in overlap if o is not None]
+        return timedelta(seconds=sum(overlap))
 
     def time_today(self) -> timedelta:
         t = datetime.today()
